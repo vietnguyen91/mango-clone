@@ -16,12 +16,13 @@
               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="">Tất cả</option>
-              <option value="romance">Lãng mạn</option>
-              <option value="action">Hành động</option>
-              <option value="fantasy">Huyền huyễn</option>
-              <option value="school">Trường học</option>
-              <option value="comedy">Hài hước</option>
-              <option value="drama">Drama</option>
+              <option 
+                v-for="genre in availableGenres" 
+                :key="genre" 
+                :value="genre"
+              >
+                {{ genre }}
+              </option>
             </select>
           </div>
 
@@ -34,8 +35,13 @@
               class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             >
               <option value="">Tất cả</option>
-              <option value="ongoing">Đang cập nhật</option>
-              <option value="completed">Hoàn thành</option>
+              <option 
+                v-for="status in availableStatuses" 
+                :key="status" 
+                :value="status"
+              >
+                {{ getStatusLabel(status) }}
+              </option>
             </select>
           </div>
 
@@ -99,12 +105,12 @@
       </div>
 
       <!-- Manga Grid -->
-      <div 
+      <div
         :class="[
-          'grid gap-6',
-          viewMode === 'grid' 
-            ? 'grid-cols-2 md:grid-cols-4 lg:grid-cols-6' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          'grid',
+          viewMode === 'grid'
+            ? 'grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 3xl:grid-cols-9 4xl:grid-cols-10 gap-3 md:gap-4'
+            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
         ]"
       >
         <MangaCard 
@@ -202,7 +208,6 @@
 <script setup>
 const route = useRoute();
 const router = useRouter();
-const { $fetch } = useNuxtApp();
 
 // SEO
 useHead({
@@ -223,6 +228,8 @@ const currentPage = ref(1);
 const pageSize = 20;
 const totalManga = ref(0);
 const totalPages = ref(1);
+const availableGenres = ref([]);
+const availableStatuses = ref([]);
 
 const filters = reactive({
   genre: '',
@@ -232,7 +239,10 @@ const filters = reactive({
 });
 
 // Initialize filters from URL
-onMounted(() => {
+onMounted(async () => {
+  // Fetch available categories first
+  await fetchCategories();
+  
   // Set initial filters from URL query parameters
   filters.genre = route.query.genre || '';
   filters.status = route.query.status || '';
@@ -254,25 +264,40 @@ watch(() => route.query, () => {
   fetchManga();
 });
 
+const fetchCategories = async () => {
+  try {
+    const response = await fetch('/api/categories');
+    const data = await response.json();
+    if (data.success) {
+      availableGenres.value = data.data.genres;
+      availableStatuses.value = data.data.statuses;
+    }
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
 const fetchManga = async () => {
   loading.value = true;
   
   try {
-    const response = await $fetch('/api/manga', {
-      query: {
-        page: currentPage.value,
-        limit: pageSize,
-        genre: filters.genre || undefined,
-        status: filters.status || undefined,
-        sort: filters.sort,
-        search: filters.search || undefined
-      }
+    const queryParams = new URLSearchParams({
+      page: currentPage.value,
+      limit: pageSize,
+      sort: filters.sort
     });
     
-    if (response.success) {
-      manga.value = response.data;
-      totalManga.value = response.pagination.total;
-      totalPages.value = response.pagination.pages;
+    if (filters.genre) queryParams.append('genre', filters.genre);
+    if (filters.status) queryParams.append('status', filters.status);
+    if (filters.search) queryParams.append('search', filters.search);
+    
+    const response = await fetch(`/api/manga?${queryParams}`);
+    const data = await response.json();
+    
+    if (data.success) {
+      manga.value = data.data;
+      totalManga.value = data.pagination.total;
+      totalPages.value = data.pagination.pages;
     }
   } catch (error) {
     console.error('Error fetching manga:', error);
@@ -317,6 +342,16 @@ const resetFilters = () => {
   
   router.push({ query: {} });
   fetchManga();
+};
+
+const getStatusLabel = (status) => {
+  const statusLabels = {
+    'ongoing': 'Đang cập nhật',
+    'completed': 'Hoàn thành',
+    'on_hold': 'Tạm dừng',
+    'dropped': 'Đã ngừng'
+  };
+  return statusLabels[status] || status;
 };
 
 // Pagination helper

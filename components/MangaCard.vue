@@ -2,18 +2,20 @@
   <div class="manga-card group">
     <NuxtLink :to="`/manga/${manga.slug}`" class="block">
       <div class="manga-card-image-container relative overflow-hidden">
-        <NuxtImg
+        <CustomImage
           :src="getImageUrl(manga.s3CoverUrl, manga.coverImage)"
           :alt="manga.title"
-          class="manga-card-image group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
+          container-class="manga-card-image-container"
+          image-class="manga-card-image group-hover:scale-105 transition-transform duration-300"
+          :quality="75"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
-        <div class="absolute top-3 right-3">
+        <div class="absolute top-2 right-2">
           <span v-if="manga.status === 'completed'" class="status-badge status-completed">
-            Hoàn thành
+            Hoàn
           </span>
           <span v-else class="status-badge status-ongoing">
-            Đang cập nhật
+            Mới
           </span>
         </div>
         <div class="manga-card-overlay absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
@@ -21,16 +23,16 @@
     </NuxtLink>
     
     <div class="manga-card-content">
-      <NuxtLink :to="`/manga/${manga.slug}`" class="block mb-3">
+      <NuxtLink :to="`/manga/${manga.slug}`" class="block mb-2">
         <h3 class="manga-card-title hover:text-primary-600 transition-colors" :title="manga.title">
           {{ manga.title }}
         </h3>
       </NuxtLink>
-      
-      <div class="manga-card-genres mb-3" v-if="manga.genres && manga.genres.length > 0">
-        <span 
-          v-for="genre in manga.genres?.slice(0, 2)" 
-          :key="genre" 
+
+      <div class="manga-card-genres mb-2" v-if="manga.genres && manga.genres.length > 0">
+        <span
+          v-for="genre in manga.genres?.slice(0, 2)"
+          :key="genre"
           class="genre-tag"
         >
           {{ genre }}
@@ -90,7 +92,7 @@ const getImageUrl = (s3Path, fallback) => {
   if (s3Path && s3Path.startsWith('/')) {
     return config.public.staticUrl + s3Path;
   }
-  return s3Path || fallback || '/placeholder-manga.jpg';
+  return s3Path || fallback || '/placeholder-manga.svg';
 };
 
 const formatNumber = (num) => {

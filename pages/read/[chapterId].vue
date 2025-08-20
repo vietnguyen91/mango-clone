@@ -1,28 +1,43 @@
 <template>
-  <div v-if="chapterData" class="bg-black min-h-screen">
-    <!-- Chapter Navigation Header -->
-    <div class="chapter-navigation bg-black/95 backdrop-blur-md text-white shadow-xl border-b border-gray-800/50">
-      <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
-        <div class="flex items-center space-x-4">
-          <NuxtLink 
-            :to="`/manga/${chapterData.manga?.slug}`"
-            class="flex items-center text-gray-300 hover:text-white transition-all duration-200 group"
-          >
-            <div class="p-2 rounded-lg bg-gray-800/50 group-hover:bg-gray-700 transition-colors mr-3">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-              </svg>
-            </div>
-            <div>
-              <div class="font-semibold text-white truncate max-w-xs">
-                {{ chapterData.manga?.title }}
+  <div v-if="chapterData">
+    <!-- Mobile Reader -->
+    <MobileReader
+      v-if="isMobile"
+      :images="chapterData.chapter.images"
+      :manga-title="chapterData.manga?.title"
+      :chapter-number="chapterData.chapter.chapterNumber"
+      :navigation="chapterData.navigation"
+      :chapters="allChapters"
+      @go-back="goBack"
+      @change-chapter="changeChapter"
+      @update-progress="updateReadingProgress"
+    />
+
+    <!-- Desktop Reader -->
+    <div v-else class="bg-black min-h-screen">
+      <!-- Chapter Navigation Header -->
+      <div class="chapter-navigation bg-black/95 backdrop-blur-md text-white shadow-xl border-b border-gray-800/50">
+        <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
+          <div class="flex items-center space-x-4">
+            <NuxtLink
+              :to="`/manga/${chapterData.manga?.slug}`"
+              class="flex items-center text-gray-300 hover:text-white transition-all duration-200 group"
+            >
+              <div class="p-2 rounded-lg bg-gray-800/50 group-hover:bg-gray-700 transition-colors mr-3">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
               </div>
-              <div class="text-xs text-gray-400">
-                Chapter {{ chapterData.chapter.chapterNumber }}
+              <div>
+                <div class="font-semibold text-white truncate max-w-xs">
+                  {{ chapterData.manga?.title }}
+                </div>
+                <div class="text-xs text-gray-400">
+                  Chương {{ chapterData.chapter.chapterNumber }}
+                </div>
               </div>
-            </div>
-          </NuxtLink>
-        </div>
+            </NuxtLink>
+          </div>
 
         <div class="flex items-center space-x-3">
           <!-- Chapter Selector -->
@@ -131,7 +146,47 @@
             </svg>
           </div>
           <h3 class="text-xl font-medium text-white mb-2">Chương chưa có ảnh</h3>
-          <p class="text-gray-400">Ảnh sẽ được cập nhật sớm nhất có thể.</p>
+          <p class="text-gray-400 mb-6">Chương này chưa có nội dung hoặc đang được cập nhật.</p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <NuxtLink
+              :to="`/manga/${chapterData.manga?.slug}`"
+              class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+              Xem danh sách chapter
+            </NuxtLink>
+
+            <NuxtLink
+              v-if="chapterData.navigation?.next"
+              :to="`/read/${chapterData.navigation.next.chapterId}`"
+              class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
+              Chuyển chapter tiếp theo
+            </NuxtLink>
+
+            <button
+              @click="reportChapter"
+              class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-6 py-3 rounded-lg transition-colors flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 19.5c-.77.833.192 2.5 1.732 2.5z"/>
+              </svg>
+              Báo lỗi chapter
+            </button>
+          </div>
+
+          <!-- Additional Info -->
+          <div class="mt-8 text-sm text-gray-500">
+            <p>Chapter ID: {{ chapterData.chapter.chapterId }}</p>
+            <p>Trạng thái: Chưa có nội dung</p>
+          </div>
         </div>
       </div>
 
@@ -302,8 +357,9 @@
         </div>
       </div>
     </div>
+    </div>
   </div>
-  
+
   <!-- Loading State -->
   <div v-else-if="pending" class="bg-black min-h-screen flex items-center justify-center">
     <div class="text-center">
@@ -341,7 +397,7 @@ const getImageUrl = (s3Path, fallback) => {
   if (s3Path && s3Path.startsWith('/')) {
     return config.public.staticUrl + s3Path;
   }
-  return s3Path || fallback || '/placeholder-page.jpg';
+  return s3Path || fallback || '/placeholder-page.svg';
 };
 
 // Fetch chapter data
@@ -349,6 +405,77 @@ const { data, pending, error } = await useLazyFetch(`/api/chapters/${route.param
 
 const chapterData = computed(() => data.value?.data || null);
 const currentChapterId = ref(route.params.chapterId);
+
+// Mobile-specific methods
+const goBack = () => {
+  navigateTo(`/manga/${chapterData.value?.manga?.slug}`)
+}
+
+const changeChapter = (chapterId) => {
+  navigateTo(`/read/${chapterId}`)
+}
+
+// Fetch all chapters for mobile chapter list
+const fetchAllChapters = async () => {
+  if (!chapterData.value?.manga?.slug) return
+
+  try {
+    const response = await $fetch(`/api/manga/${chapterData.value.manga.slug}`)
+    if (response.success && response.data.chapters) {
+      allChapters.value = response.data.chapters.map(chapter => ({
+        chapterId: chapter.chapterId,
+        chapterNumber: chapter.chapterNumber,
+        title: chapter.title,
+        uploadDate: chapter.uploadDate,
+        pageCount: chapter.images?.length || 0,
+        isRead: false // TODO: Implement reading history
+      }))
+    }
+  } catch (error) {
+    console.error('Error fetching chapters:', error)
+  }
+}
+
+// Increment view count when chapter is successfully loaded
+onMounted(async () => {
+  // Detect mobile
+  isMobile.value = window.innerWidth < 768
+
+  // Handle window resize
+  const handleResize = () => {
+    isMobile.value = window.innerWidth < 768
+  }
+  window.addEventListener('resize', handleResize)
+
+  // Fetch chapters for mobile
+  if (isMobile.value) {
+    await fetchAllChapters()
+  }
+
+  if (chapterData.value?.chapter?.chapterId) {
+    try {
+      // Call view increment API (non-blocking) using native fetch
+      const response = await fetch(`/api/chapters/${chapterData.value.chapter.chapterId}/view`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const result = await response.json()
+      console.log('View count incremented for chapter:', chapterData.value.chapter.chapterId, result)
+    } catch (error) {
+      // Silently fail - view counting is not critical for user experience
+      console.warn('Failed to increment view count:', error)
+    }
+  }
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+  })
+});
+
+// Mobile detection
+const isMobile = ref(false);
 
 // Reading settings
 const showSettings = ref(false);
@@ -358,6 +485,9 @@ const imageFit = ref('width');
 
 // Reading progress
 const readingProgress = ref(0);
+
+// All chapters for mobile chapter list
+const allChapters = ref([]);
 
 // SEO
 useHead(() => ({
@@ -398,7 +528,7 @@ const scrollToPage = (pageNumber) => {
 
 const handleImageError = (event) => {
   console.error('Failed to load image:', event.target.src);
-  event.target.src = '/placeholder-page.jpg';
+  event.target.src = '/placeholder-page.svg';
 };
 
 const onImageLoaded = (pageIndex) => {
@@ -537,6 +667,27 @@ const getCleanChapterTitle = (chapter) => {
   if (cleanTitle.length < 3 || /^\d+$/.test(cleanTitle)) return '';
   
   return cleanTitle;
+};
+
+// Report chapter issues
+const reportChapter = () => {
+  const chapterId = chapterData.value?.chapter?.chapterId;
+  const mangaTitle = chapterData.value?.manga?.title;
+
+  // Create a simple alert for now - in production this would be a proper reporting system
+  alert(`Báo lỗi chapter đã được ghi nhận!\n\nChapter: ${chapterId}\nManga: ${mangaTitle}\nVấn đề: Chương không có nội dung\n\nCảm ơn bạn đã báo cáo!`);
+
+  // In production, you would send this to an API endpoint:
+  // await $fetch('/api/reports', {
+  //   method: 'POST',
+  //   body: {
+  //     type: 'chapter_no_content',
+  //     chapterId,
+  //     mangaSlug: chapterData.value?.manga?.slug,
+  //     userAgent: navigator.userAgent,
+  //     timestamp: new Date().toISOString()
+  //   }
+  // });
 };
 
 onUnmounted(() => {

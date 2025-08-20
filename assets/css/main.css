@@ -15,74 +15,75 @@
 @layer components {
   .manga-card {
     @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-300 transform hover:-translate-y-1;
-    min-height: 400px;
+    min-height: 340px;
     display: flex;
     flex-direction: column;
   }
-  
+
   .manga-card-image-container {
     @apply relative overflow-hidden;
     flex-shrink: 0;
     aspect-ratio: 3/4;
   }
-  
+
   .manga-card-image {
     @apply w-full h-full object-cover;
   }
-  
+
   .status-badge {
-    @apply px-2 py-1 text-xs font-medium rounded-md shadow-sm backdrop-blur-sm;
+    @apply px-1.5 py-0.5 text-xs font-medium rounded shadow-sm backdrop-blur-sm;
   }
-  
+
   .status-completed {
     @apply bg-green-500/90 text-white;
   }
-  
+
   .status-ongoing {
     @apply bg-blue-500/90 text-white;
   }
-  
+
   .manga-card-content {
-    @apply p-4 flex-grow flex flex-col;
+    @apply p-3 flex-grow flex flex-col;
   }
-  
+
   .manga-card-title {
     @apply font-semibold text-gray-900 text-sm leading-tight;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 2.5rem;
+    min-height: 3.75rem;
+    line-height: 1.25rem;
   }
   
   .manga-card-genres {
-    @apply flex flex-wrap gap-2;
+    @apply flex flex-wrap gap-1.5;
   }
-  
+
   .genre-tag {
-    @apply px-2 py-1 bg-primary-50 text-primary-600 rounded-md text-xs font-medium border border-primary-100;
+    @apply px-1.5 py-0.5 bg-primary-50 text-primary-600 rounded text-xs font-medium border border-primary-100;
   }
-  
+
   .genre-more {
-    @apply px-2 py-1 bg-gray-100 text-gray-500 rounded-md text-xs font-medium;
+    @apply px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-xs font-medium;
   }
-  
+
   .manga-card-stats {
-    @apply mt-auto space-y-2;
+    @apply mt-auto space-y-1.5;
   }
-  
+
   .stats-row {
     @apply flex items-center justify-between text-xs text-gray-500;
   }
-  
+
   .stat-item {
-    @apply flex items-center space-x-1;
+    @apply flex items-center space-x-0.5;
   }
-  
+
   .stat-icon {
     @apply w-3 h-3 flex-shrink-0;
   }
-  
+
   .rating-container {
     @apply flex items-center justify-end;
   }
@@ -167,18 +168,82 @@
     margin-left: 3.75rem;
   }
   
+  /* Enhanced Search Styles */
+  .search-suggestions {
+    @apply absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto;
+  }
+
+  .search-suggestion-item {
+    @apply flex items-center w-full text-left px-3 py-2 hover:bg-gray-50 transition-colors;
+  }
+
+  .search-suggestion-item.active {
+    @apply bg-primary-50;
+  }
+
+  .search-highlight {
+    @apply bg-yellow-200 px-0;
+  }
+
+  /* Mobile Search Enhancements */
+  @media (max-width: 768px) {
+    .search-suggestions {
+      @apply max-h-60;
+    }
+
+    .search-suggestion-item {
+      @apply px-4 py-3;
+    }
+
+    .mobile-search-container {
+      @apply relative;
+    }
+
+    .mobile-filter-toggle {
+      @apply absolute right-2 top-1/2 transform -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600;
+    }
+  }
+
   /* Mobile responsive improvements */
   @media (max-width: 640px) {
     .chapter-item .flex-shrink-0 {
       @apply w-10 h-10;
     }
-    
+
     .chapter-item svg {
       @apply w-5 h-5;
     }
-    
+
     .ml-15 {
       margin-left: 2.5rem;
+    }
+
+    /* Mobile search optimizations */
+    .manga-card {
+      min-height: 280px;
+    }
+
+    .manga-card-content {
+      @apply p-2.5;
+    }
+
+    .manga-card-title {
+      @apply text-xs;
+      min-height: 3rem;
+      line-height: 1rem;
+      -webkit-line-clamp: 3;
+    }
+
+    .genre-tag {
+      @apply px-1 py-0.5 text-xs;
+    }
+
+    .stat-item {
+      @apply text-xs;
+    }
+
+    .search-input-mobile {
+      @apply text-base; /* Prevent zoom on iOS */
     }
   }
 }
@@ -190,12 +255,35 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+  }
+
+  /* Hide scrollbar for mobile horizontal scroll */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Smooth scroll behavior */
+  .snap-x {
+    scroll-snap-type: x mandatory;
+  }
+
+  .snap-mandatory {
+    scroll-snap-type: x mandatory;
+  }
+
+  .snap-start {
+    scroll-snap-align: start;
   }
 }
 
