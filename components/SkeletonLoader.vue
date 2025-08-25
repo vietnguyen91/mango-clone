@@ -22,6 +22,27 @@
       <div class="skeleton-image h-48 md:h-56 w-full rounded-xl"></div>
     </div>
 
+    <!-- Trending Card Skeleton -->
+    <div v-else-if="type === 'trending-card'" class="trending-card-skeleton">
+      <!-- Badge skeleton -->
+      <div class="absolute top-2 md:top-4 left-2 md:left-4 z-10">
+        <div class="skeleton-text bg-gray-300 rounded-full px-2 md:px-3 py-1 w-8 md:w-10 h-5 md:h-6"></div>
+      </div>
+
+      <!-- Image skeleton -->
+      <div class="skeleton-image h-40 md:h-48 w-full"></div>
+
+      <!-- Content skeleton -->
+      <div class="p-2.5 md:p-4 space-y-2">
+        <div class="skeleton-text h-3 md:h-4 w-4/5 rounded"></div>
+        <div class="skeleton-text h-2 md:h-3 w-3/5 rounded"></div>
+        <div class="flex justify-between items-center">
+          <div class="skeleton-text h-2 md:h-3 w-8 rounded"></div>
+          <div class="skeleton-text h-2 md:h-3 w-12 rounded"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Search Suggestion Skeleton -->
     <div v-else-if="type === 'search-suggestion'" class="search-suggestion-skeleton">
       <div class="flex items-center p-3 space-x-3">
@@ -163,6 +184,10 @@ defineProps({
 
 .featured-card-skeleton {
   @apply bg-white rounded-xl shadow-lg overflow-hidden;
+}
+
+.trending-card-skeleton {
+  @apply relative bg-white rounded-xl md:rounded-2xl shadow-lg border border-gray-100 overflow-hidden;
 }
 
 .search-suggestion-skeleton {

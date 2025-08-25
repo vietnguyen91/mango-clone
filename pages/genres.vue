@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Page Header -->
-    <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-900 mb-4">Thể loại truyện tranh</h1>
-      <p class="text-gray-600">Khám phá truyện tranh theo thể loại yêu thích của bạn</p>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+    <!-- Mobile-Optimized Page Header -->
+    <div class="mb-6 md:mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2 md:mb-4">Thể loại truyện tranh</h1>
+      <p class="text-gray-600 text-sm md:text-base">Khám phá truyện tranh theo thể loại yêu thích của bạn</p>
     </div>
 
     <!-- Loading State -->
@@ -28,27 +28,27 @@
       </button>
     </div>
 
-    <!-- Genres Grid -->
-    <div v-else-if="data?.data?.genres" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 3xl:grid-cols-8 4xl:grid-cols-9 gap-4">
+    <!-- Mobile-Optimized Genres Grid -->
+    <div v-else-if="data?.data?.genres" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-3 md:gap-4">
       <NuxtLink
         v-for="genre in data.data.genres"
         :key="genre"
         :to="`/manga?genre=${encodeURIComponent(genre)}`"
-        class="group bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 hover:border-primary-300"
+        class="group bg-white rounded-lg p-4 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200 hover:border-primary-300 touch-manipulation"
       >
         <div class="text-center">
-          <!-- Genre Icon -->
-          <div class="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform duration-200">
+          <!-- Mobile-optimized Genre Icon -->
+          <div class="w-10 h-10 md:w-12 md:h-12 mx-auto mb-2 md:mb-3 bg-gradient-to-br from-primary-500 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-base md:text-lg group-hover:scale-110 transition-transform duration-200">
             {{ getGenreIcon(genre) }}
           </div>
-          
+
           <!-- Genre Name -->
-          <h3 class="font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
+          <h3 class="font-medium text-gray-900 group-hover:text-primary-600 transition-colors text-sm md:text-base line-clamp-2">
             {{ genre }}
           </h3>
-          
+
           <!-- Manga Count -->
-          <p class="text-sm text-gray-500 mt-1">
+          <p class="text-xs md:text-sm text-gray-500 mt-1">
             {{ getMangaCount(genre) }} truyện
           </p>
         </div>

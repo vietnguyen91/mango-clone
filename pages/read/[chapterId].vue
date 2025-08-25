@@ -389,9 +389,14 @@
 </template>
 
 <script setup>
+import { useRecentlyViewedStore } from '~/stores/recentlyViewed'
+
 const route = useRoute();
 const { $fetch } = useNuxtApp();
 const config = useRuntimeConfig();
+
+// Recently viewed tracking
+const recentlyViewedStore = useRecentlyViewedStore()
 
 const getImageUrl = (s3Path, fallback) => {
   if (s3Path && s3Path.startsWith('/')) {
@@ -694,6 +699,24 @@ onUnmounted(() => {
   window.removeEventListener('scroll', updateReadingProgress);
   window.removeEventListener('keydown', handleKeyPress);
 });
+
+// Track chapter reading for recently viewed
+watch(chapterData, (newChapterData) => {
+  if (newChapterData && newChapterData.manga && process.client) {
+    // Load recently viewed store if not loaded
+    if (!recentlyViewedStore.isLoaded) {
+      recentlyViewedStore.loadFromStorage()
+    }
+
+    // Update reading progress
+    recentlyViewedStore.updateReadingProgress(
+      newChapterData.manga._id,
+      newChapterData.chapterNumber,
+      newChapterData.title,
+      newChapterData.manga.chapterCount
+    )
+  }
+}, { immediate: true })
 
 // Handle 404
 if (error.value?.statusCode === 404) {

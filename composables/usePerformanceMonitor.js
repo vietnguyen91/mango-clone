@@ -204,7 +204,18 @@ export const usePerformanceMonitor = () => {
   }
 
   // Get optimization settings for images
-  const getImageOptimization = () => {
+  const getImageOptimization = (imageUrl = '') => {
+    // Skip optimization for Contabo images
+    if (imageUrl && imageUrl.includes('usc1.contabostorage.com')) {
+      return {
+        quality: 80, // Default quality, no processing
+        format: 'auto',
+        progressive: false,
+        blur: 0,
+        skipOptimization: true
+      }
+    }
+
     const baseQuality = 80
     let quality = baseQuality
 
@@ -229,7 +240,8 @@ export const usePerformanceMonitor = () => {
       quality,
       format: optimizationFlags.value.useWebP ? 'webp' : 'auto',
       progressive: networkInfo.value.effectiveType !== '2g',
-      blur: quality < 60 ? 2 : 0 // Slight blur for very low quality
+      blur: quality < 60 ? 2 : 0, // Slight blur for very low quality
+      skipOptimization: false
     }
   }
 

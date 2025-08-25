@@ -8,10 +8,7 @@ export const connectDB = async () => {
   }
 
   try {
-    const { connection } = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mango', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const { connection } = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/mango-clone');
 
     isConnected = connection.readyState === 1;
     console.log('MongoDB connected successfully');

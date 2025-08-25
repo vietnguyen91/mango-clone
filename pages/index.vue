@@ -1,50 +1,51 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Mobile-First Hero Section -->
+    <!-- Mobile-Optimized Hero Section -->
     <section class="relative bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-600 text-white overflow-hidden">
       <!-- Background Pattern -->
       <div class="absolute inset-0 opacity-10">
         <div class="absolute inset-0 bg-gradient-to-br from-white/5 to-white/10 opacity-50"></div>
       </div>
 
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <div class="text-center md:text-left max-w-4xl">
-          <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+          <!-- Mobile-optimized heading -->
+          <h1 class="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 leading-tight">
             Đọc truyện tranh
             <span class="block text-yellow-300">miễn phí tại Việt Nam</span>
           </h1>
-          <p class="text-lg md:text-xl text-primary-100 mb-8 max-w-2xl">
-            Hàng ngàn bộ manga, manhwa, manhua được cập nhật hàng ngày với chất lượng cao và tốc độ nhanh nhất
+          <p class="text-base md:text-lg lg:text-xl text-primary-100 mb-6 md:mb-8 max-w-2xl">
+            Hàng ngàn bộ manga, manhwa, manhua được cập nhật hàng ngày với chất lượng cao
           </p>
 
-          <!-- Quick Action Buttons -->
-          <div class="flex flex-col sm:flex-row gap-4 mb-8">
+          <!-- Mobile-optimized Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8">
             <NuxtLink
               to="/manga"
-              class="bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:bg-primary-50 transition-all duration-200 text-center shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              class="bg-white text-primary-600 px-6 py-4 md:px-8 rounded-xl font-bold hover:bg-primary-50 transition-all duration-200 text-center shadow-lg hover:shadow-xl transform hover:-translate-y-1 min-h-[48px] flex items-center justify-center"
             >
               🚀 Khám phá ngay
             </NuxtLink>
             <NuxtLink
               to="/manga?sort=popular"
-              class="border-2 border-white text-white px-8 py-4 rounded-xl font-bold hover:bg-white hover:text-primary-600 transition-all duration-200 text-center"
+              class="border-2 border-white text-white px-6 py-4 md:px-8 rounded-xl font-bold hover:bg-white hover:text-primary-600 transition-all duration-200 text-center min-h-[48px] flex items-center justify-center"
             >
               🔥 Truyện hot nhất
             </NuxtLink>
           </div>
 
-          <!-- Quick Stats -->
-          <div class="grid grid-cols-3 gap-4 md:gap-8 max-w-md">
+          <!-- Compact Stats for Mobile -->
+          <div class="grid grid-cols-3 gap-3 md:gap-8 max-w-sm md:max-w-md">
             <div class="text-center">
-              <div class="text-2xl md:text-3xl font-bold text-yellow-300">{{ formatNumber(stats.totalManga) }}+</div>
+              <div class="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-300">{{ formatNumber(stats.totalManga) }}+</div>
               <div class="text-xs md:text-sm text-primary-200">Bộ truyện</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl md:text-3xl font-bold text-yellow-300">{{ formatNumber(stats.totalChapters) }}+</div>
+              <div class="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-300">{{ formatNumber(stats.totalChapters) }}+</div>
               <div class="text-xs md:text-sm text-primary-200">Chương</div>
             </div>
             <div class="text-center">
-              <div class="text-2xl md:text-3xl font-bold text-yellow-300">{{ stats.dailyUpdates }}+</div>
+              <div class="text-xl md:text-2xl lg:text-3xl font-bold text-yellow-300">{{ stats.dailyUpdates }}+</div>
               <div class="text-xs md:text-sm text-primary-200">Cập nhật/ngày</div>
             </div>
           </div>
@@ -55,48 +56,65 @@
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
-      <!-- Trending Today Section -->
-      <section class="mb-12">
-        <div class="flex items-center justify-between mb-8">
+      <!-- Recently Viewed Section -->
+      <RecentlyViewedSection />
+
+      <!-- Mobile-Optimized Trending Today Section -->
+      <section class="mb-8 md:mb-12">
+        <div class="flex items-center justify-between mb-6 md:mb-8">
           <div class="flex items-center">
-            <div class="bg-gradient-to-r from-red-500 to-pink-500 rounded-full p-2 mr-3">
-              <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <div class="bg-gradient-to-r from-red-500 to-pink-500 rounded-full p-2 mr-3 flex-shrink-0">
+              <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
               </svg>
             </div>
-            <div>
-              <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
+            <div class="min-w-0 flex-1">
+              <h2 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 truncate">
                 🔥 Trending Hôm Nay
               </h2>
-              <p class="text-gray-600 text-sm mt-1">Những bộ truyện được đọc nhiều nhất trong 24h qua</p>
+              <p class="text-gray-600 text-xs md:text-sm mt-1 line-clamp-1">Những bộ truyện được đọc nhiều nhất trong 24h qua</p>
             </div>
           </div>
-          <div class="hidden md:flex items-center space-x-2">
-            <button class="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full text-sm font-medium hover:shadow-lg transition-all duration-200">
-              Xem tất cả
-            </button>
-          </div>
+          <!-- Mobile-friendly "View All" button -->
+          <NuxtLink
+            to="/manga?sort=popular"
+            class="flex-shrink-0 px-3 py-2 md:px-4 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full text-xs md:text-sm font-medium hover:shadow-lg transition-all duration-200 min-h-[40px] flex items-center"
+          >
+            <span class="hidden sm:inline">Xem tất cả</span>
+            <span class="sm:hidden">Xem</span>
+          </NuxtLink>
         </div>
 
-        <!-- Trending Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Mobile-Optimized Trending Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+          <!-- Loading State -->
+          <template v-if="loadingPopular">
+            <SkeletonLoader
+              v-for="i in 6"
+              :key="`trending-skeleton-${i}`"
+              type="trending-card"
+            />
+          </template>
+
+          <!-- Actual Content -->
           <div
+            v-else
             v-for="(manga, index) in popularManga.slice(0, 6)"
             :key="manga._id"
-            class="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-200"
+            class="group relative bg-white rounded-xl md:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-red-200 touch-manipulation"
           >
-            <!-- Trending Badge -->
-            <div class="absolute top-4 left-4 z-10">
-              <div class="flex items-center bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+            <!-- Mobile-optimized Trending Badge -->
+            <div class="absolute top-2 md:top-4 left-2 md:left-4 z-10">
+              <div class="flex items-center bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 md:px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                 <span class="mr-1">#{{ index + 1 }}</span>
-                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-2.5 h-2.5 md:w-3 md:h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/>
                 </svg>
               </div>
             </div>
 
-            <!-- Image Container -->
-            <div class="relative h-48 overflow-hidden">
+            <!-- Mobile-optimized Image Container -->
+            <div class="relative h-40 md:h-48 overflow-hidden">
               <NuxtLink :to="`/manga/${manga.slug}`">
                 <CustomImage
                   :src="getImageUrl(manga.s3CoverUrl, manga.coverImage)"
@@ -389,34 +407,34 @@ const formatNumber = (num) => {
 
 // Fetch data on mount
 onMounted(async () => {
-  // Fetch featured manga
+  // Fetch featured manga using recommendation API
   try {
-    const featuredResponse = await $fetch('/api/manga', {
+    const featuredResponse = await $fetch('/api/recommendations', {
       query: {
-        sort: 'featured',
+        type: 'featured',
         limit: 6
       }
     });
 
     if (featuredResponse.success) {
-      featuredManga.value = featuredResponse.data || [];
+      featuredManga.value = featuredResponse.data.recommendations || [];
     }
   } catch (error) {
     console.error('Error fetching featured manga:', error);
     loadingFeatured.value = false;
   }
 
-  // Fetch latest manga
+  // Fetch latest manga using recommendation API
   try {
-    const latestResponse = await $fetch('/api/manga', {
+    const latestResponse = await $fetch('/api/recommendations', {
       query: {
-        sort: 'latest',
+        type: 'recent',
         limit: 12
       }
     });
 
     if (latestResponse.success) {
-      latestManga.value = latestResponse.data || [];
+      latestManga.value = latestResponse.data.recommendations || [];
     }
   } catch (error) {
     console.error('Error fetching latest manga:', error);
@@ -424,17 +442,17 @@ onMounted(async () => {
     loadingLatest.value = false;
   }
 
-  // Fetch popular manga
+  // Fetch popular manga using recommendation API
   try {
-    const popularResponse = await $fetch('/api/manga', {
+    const popularResponse = await $fetch('/api/recommendations', {
       query: {
-        sort: 'popular',
+        type: 'popular',
         limit: 12
       }
     });
 
     if (popularResponse.success) {
-      popularManga.value = popularResponse.data || [];
+      popularManga.value = popularResponse.data.recommendations || [];
     }
   } catch (error) {
     console.error('Error fetching popular manga:', error);
@@ -442,17 +460,17 @@ onMounted(async () => {
     loadingPopular.value = false;
   }
 
-  // Fetch completed manga
+  // Fetch completed manga using recommendation API
   try {
-    const completedResponse = await $fetch('/api/manga', {
+    const completedResponse = await $fetch('/api/recommendations', {
       query: {
-        status: 'completed',
+        type: 'completed',
         limit: 12
       }
     });
 
     if (completedResponse.success) {
-      completedManga.value = completedResponse.data || [];
+      completedManga.value = completedResponse.data.recommendations || [];
     }
   } catch (error) {
     console.error('Error fetching completed manga:', error);

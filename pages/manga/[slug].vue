@@ -1,112 +1,118 @@
 <template>
-  <div v-if="manga" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Breadcrumb -->
-    <nav class="flex mb-6" aria-label="Breadcrumb">
-      <ol class="flex items-center space-x-2">
+  <div v-if="manga" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+    <!-- Mobile-Optimized Breadcrumb -->
+    <nav class="flex mb-4 md:mb-6 overflow-x-auto" aria-label="Breadcrumb">
+      <ol class="flex items-center space-x-2 whitespace-nowrap">
         <li>
-          <NuxtLink to="/" class="text-gray-500 hover:text-primary-600">Trang chủ</NuxtLink>
+          <NuxtLink to="/" class="text-gray-500 hover:text-primary-600 text-sm md:text-base">Trang chủ</NuxtLink>
         </li>
         <li class="flex items-center">
-          <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-3 h-3 md:w-4 md:h-4 text-gray-400 mx-1 md:mx-2" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
           </svg>
-          <NuxtLink to="/manga" class="text-gray-500 hover:text-primary-600">Truyện tranh</NuxtLink>
+          <NuxtLink to="/manga" class="text-gray-500 hover:text-primary-600 text-sm md:text-base">Truyện tranh</NuxtLink>
         </li>
         <li class="flex items-center">
-          <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-3 h-3 md:w-4 md:h-4 text-gray-400 mx-1 md:mx-2" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
           </svg>
-          <span class="text-gray-900 font-medium">{{ manga.title }}</span>
+          <span class="text-gray-900 font-medium text-sm md:text-base truncate max-w-32 md:max-w-none" :title="manga.title">{{ manga.title }}</span>
         </li>
       </ol>
     </nav>
 
-    <!-- Manga Info -->
-    <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
-      <div class="md:flex">
-        <!-- Cover Image -->
-        <div class="md:w-80 md:flex-shrink-0">
+    <!-- Mobile-Optimized Manga Info -->
+    <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6 md:mb-8">
+      <div class="flex flex-col md:flex-row">
+        <!-- Mobile-First Cover Image -->
+        <div class="w-full md:w-80 md:flex-shrink-0">
           <NuxtImg
             :src="getImageUrl(manga.s3CoverUrl, manga.coverImage)"
             :alt="manga.title"
-            class="w-full h-96 md:h-full object-cover"
+            class="w-full h-64 md:h-96 lg:h-full object-cover"
           />
         </div>
 
-        <!-- Manga Details -->
-        <div class="p-6 md:p-8 flex-1">
-          <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ manga.title }}</h1>
-            
-            <div class="flex items-center space-x-4 mb-4">
-              <span 
+        <!-- Mobile-Optimized Manga Details -->
+        <div class="p-4 md:p-6 lg:p-8 flex-1">
+          <div class="mb-4 md:mb-6">
+            <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 md:mb-3 line-clamp-2">{{ manga.title }}</h1>
+
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-3 md:mb-4">
+              <span
                 :class="[
-                  'px-3 py-1 rounded-full text-sm font-medium',
-                  manga.status === 'completed' 
-                    ? 'bg-green-100 text-green-800' 
+                  'px-3 py-1 rounded-full text-sm font-medium w-fit',
+                  manga.status === 'completed'
+                    ? 'bg-green-100 text-green-800'
                     : 'bg-blue-100 text-blue-800'
                 ]"
               >
                 {{ manga.status === 'completed' ? 'Hoàn thành' : 'Đang cập nhật' }}
               </span>
-              
+
               <div v-if="manga.rating" class="flex items-center">
-                <svg class="w-5 h-5 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-4 h-4 md:w-5 md:h-5 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                 </svg>
-                <span class="text-gray-700 font-medium">{{ manga.rating.toFixed(1) }}/5</span>
+                <span class="text-gray-700 font-medium text-sm md:text-base">{{ manga.rating.toFixed(1) }}/5</span>
               </div>
             </div>
 
-            <!-- Stats -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div class="text-center">
-                <div class="text-2xl font-bold text-primary-600">{{ formatNumber(manga.viewCount) }}</div>
-                <div class="text-sm text-gray-500">Lượt xem</div>
+            <!-- Mobile-Optimized Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+              <div class="text-center bg-gray-50 rounded-lg p-3 md:p-4">
+                <div class="text-lg md:text-xl lg:text-2xl font-bold text-primary-600">{{ manga.viewCount || 0 }}</div>
+                <div class="text-xs md:text-sm text-gray-500">Lượt xem</div>
               </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-primary-600">{{ formatNumber(manga.likeCount) }}</div>
-                <div class="text-sm text-gray-500">Lượt thích</div>
+              <div class="text-center bg-gray-50 rounded-lg p-3 md:p-4">
+                <div class="text-lg md:text-xl lg:text-2xl font-bold text-primary-600">{{ manga.likeCount || 0 }}</div>
+                <div class="text-xs md:text-sm text-gray-500">Lượt thích</div>
               </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-primary-600">{{ manga.chapterCount || 0 }}</div>
-                <div class="text-sm text-gray-500">Chương</div>
+              <div class="text-center bg-gray-50 rounded-lg p-3 md:p-4">
+                <div class="text-lg md:text-xl lg:text-2xl font-bold text-primary-600">{{ manga.chapterCount || 0 }}</div>
+                <div class="text-xs md:text-sm text-gray-500">Chương</div>
               </div>
-              <div class="text-center">
-                <div class="text-2xl font-bold text-primary-600">{{ manga.author || 'N/A' }}</div>
-                <div class="text-sm text-gray-500">Tác giả</div>
+              <div class="text-center bg-gray-50 rounded-lg p-3 md:p-4 col-span-2 md:col-span-1">
+                <div class="text-sm md:text-base lg:text-lg font-bold text-primary-600 truncate" :title="manga.author">{{ manga.author || 'N/A' }}</div>
+                <div class="text-xs md:text-sm text-gray-500">Tác giả</div>
               </div>
             </div>
 
-            <!-- Genres -->
-            <div v-if="manga.genres && manga.genres.length" class="mb-6">
+            <!-- Mobile-Optimized Genres -->
+            <div v-if="manga.genres && manga.genres.length" class="mb-4 md:mb-6">
               <h3 class="text-sm font-medium text-gray-700 mb-2">Thể loại:</h3>
-              <div class="flex flex-wrap gap-2">
+              <div class="flex flex-wrap gap-1.5 md:gap-2">
                 <NuxtLink
                   v-for="genre in manga.genres"
                   :key="genre"
                   :to="`/manga?genre=${genre.toLowerCase()}`"
-                  class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium hover:bg-primary-200 transition-colors"
+                  class="px-2.5 md:px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs md:text-sm font-medium hover:bg-primary-200 transition-colors touch-manipulation"
                 >
                   {{ genre }}
                 </NuxtLink>
               </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3">
+            <!-- Mobile-Optimized Action Buttons -->
+            <div class="flex flex-col gap-3">
               <NuxtLink
                 v-if="firstChapter"
                 :to="`/read/${firstChapter.chapterId}`"
-                class="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors text-center"
+                class="w-full bg-primary-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors text-center flex items-center justify-center gap-2 min-h-[48px] touch-manipulation"
               >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m2-10v18a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2h8l4 4z"/>
+                </svg>
                 Bắt đầu đọc
               </NuxtLink>
               <NuxtLink
                 v-if="latestChapter"
                 :to="`/read/${latestChapter.chapterId}`"
-                class="flex-1 border-2 border-primary-600 text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors text-center"
+                class="w-full border-2 border-primary-600 text-primary-600 px-6 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors text-center flex items-center justify-center gap-2 min-h-[48px] touch-manipulation"
               >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
                 Chương mới nhất
               </NuxtLink>
             </div>
@@ -123,19 +129,20 @@
       </div>
     </div>
 
-    <!-- Chapter List -->
+    <!-- Mobile-Optimized Chapter List -->
     <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-      <div class="px-6 py-4 border-b border-gray-200">
+      <div class="px-4 md:px-6 py-3 md:py-4 border-b border-gray-200">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-gray-900">
+          <h2 class="text-lg md:text-xl font-semibold text-gray-900">
             Danh sách chương ({{ chapters.length }})
           </h2>
           <div class="flex items-center space-x-2">
             <button
               @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
-              class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+              class="px-2.5 md:px-3 py-1.5 md:py-2 text-xs md:text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors touch-manipulation"
             >
-              {{ sortOrder === 'asc' ? '↑ Cũ nhất' : '↓ Mới nhất' }}
+              <span class="hidden sm:inline">{{ sortOrder === 'asc' ? '↑ Cũ nhất' : '↓ Mới nhất' }}</span>
+              <span class="sm:hidden">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
             </button>
           </div>
         </div>
@@ -149,18 +156,18 @@
         >
           <NuxtLink
             :to="`/read/${chapter.chapterId}`"
-            class="block px-6 py-5 hover:bg-gradient-to-r hover:from-primary-50 hover:to-transparent transition-all duration-200 border-l-4 border-transparent hover:border-primary-500"
+            class="block px-4 md:px-6 py-4 md:py-5 hover:bg-gradient-to-r hover:from-primary-50 hover:to-transparent transition-all duration-200 border-l-4 border-transparent hover:border-primary-500 touch-manipulation"
           >
             <div class="flex items-center justify-between">
               <div class="flex-1 min-w-0">
                 <div class="flex items-center space-x-3 mb-2">
-                  <div class="flex-shrink-0 w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors">
-                    <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-primary-100 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                    <svg class="w-5 h-5 md:w-6 md:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29.82-5.877 2.172M15 6.306A7.962 7.962 0 0112 5c-2.34 0 4.29-.82 5.877-2.172z"/>
                     </svg>
                   </div>
-                  <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-primary-700 transition-colors">
+                  <div class="flex-1 min-w-0">
+                    <h3 class="text-base md:text-lg font-semibold text-gray-900 group-hover:text-primary-700 transition-colors">
                       Chapter {{ chapter.chapterNumber }}
                     </h3>
                     <p v-if="getCleanTitle(chapter)" class="text-sm text-gray-600 line-clamp-1">
@@ -168,36 +175,40 @@
                     </p>
                   </div>
                 </div>
-                
-                <div class="flex items-center space-x-6 text-sm text-gray-500 ml-15">
+
+                <!-- Mobile-optimized chapter meta -->
+                <div class="flex items-center space-x-3 md:space-x-6 text-xs md:text-sm text-gray-500 ml-13 md:ml-15">
                   <div v-if="chapter.publishedDate" class="flex items-center space-x-1">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                     </svg>
-                    <span>{{ formatDate(chapter.publishedDate) }}</span>
+                    <span class="hidden sm:inline">{{ formatDate(chapter.publishedDate) }}</span>
+                    <span class="sm:hidden">{{ formatDateShort(chapter.publishedDate) }}</span>
                   </div>
                   <div v-if="chapter.viewCount" class="flex items-center space-x-1">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
                       <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
                     </svg>
                     <span>{{ formatNumber(chapter.viewCount) }}</span>
                   </div>
                   <div v-if="chapter.imageCount" class="flex items-center space-x-1">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-3 h-3 md:w-4 md:h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm3 1h6v4H7V5zm8 8v2H5v-2h10z" clip-rule="evenodd"/>
                     </svg>
-                    <span>{{ chapter.imageCount }} trang</span>
+                    <span class="hidden sm:inline">{{ chapter.imageCount }} trang</span>
+                    <span class="sm:hidden">{{ chapter.imageCount }}p</span>
                   </div>
                 </div>
               </div>
-              
-              <div class="flex-shrink-0 ml-4">
-                <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div class="px-6 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg shadow-md hover:bg-primary-700 hover:shadow-lg transition-all duration-200">
-                    <span class="flex items-center space-x-2">
-                      <span>Đọc</span>
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+              <!-- Mobile-optimized read button -->
+              <div class="flex-shrink-0 ml-2 md:ml-4">
+                <div class="md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
+                  <div class="px-3 md:px-6 py-2 bg-primary-600 text-white text-xs md:text-sm font-medium rounded-lg shadow-md hover:bg-primary-700 hover:shadow-lg transition-all duration-200">
+                    <span class="flex items-center space-x-1 md:space-x-2">
+                      <span class="hidden sm:inline">Đọc</span>
+                      <svg class="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                       </svg>
                     </span>
@@ -258,9 +269,14 @@
 </template>
 
 <script setup>
+import { useRecentlyViewedStore } from '~/stores/recentlyViewed'
+
 const route = useRoute();
 const { $fetch } = useNuxtApp();
 const config = useRuntimeConfig();
+
+// Recently viewed tracking
+const recentlyViewedStore = useRecentlyViewedStore()
 
 const getImageUrl = (s3Path, fallback) => {
   if (s3Path && s3Path.startsWith('/')) {
@@ -340,10 +356,10 @@ const formatDate = (dateString) => {
 
 const getCleanTitle = (chapter) => {
   if (!chapter.title) return '';
-  
+
   const title = chapter.title.trim();
   const chapterNum = chapter.chapterNumber;
-  
+
   // Remove duplicate patterns
   const patterns = [
     `${chapterNum} Chapter ${chapterNum}`,
@@ -352,20 +368,54 @@ const getCleanTitle = (chapter) => {
     `Chapter ${chapterNum} -`,
     `${chapterNum} -`
   ];
-  
+
   let cleanTitle = title;
   patterns.forEach(pattern => {
     cleanTitle = cleanTitle.replace(new RegExp(pattern, 'gi'), '').trim();
   });
-  
+
   // Remove leading/trailing dashes and spaces
   cleanTitle = cleanTitle.replace(/^[-\s]+|[-\s]+$/g, '');
-  
+
   // If title is just numbers or very short, don't show
   if (cleanTitle.length < 3 || /^\d+$/.test(cleanTitle)) return '';
-  
+
   return cleanTitle;
 };
+
+// Mobile-friendly date formatter
+const formatDateShort = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 1) return 'Hôm qua';
+  if (diffDays < 7) return `${diffDays}d`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w`;
+  return `${Math.floor(diffDays / 30)}m`;
+};
+
+// Track manga visit for recently viewed
+watch(manga, (newManga) => {
+  if (newManga && process.client) {
+    // Load recently viewed store if not loaded
+    if (!recentlyViewedStore.isLoaded) {
+      recentlyViewedStore.loadFromStorage()
+    }
+
+    // Add to recently viewed
+    recentlyViewedStore.addToRecent({
+      mangaId: newManga._id,
+      title: newManga.title,
+      coverImage: newManga.s3CoverUrl || newManga.coverImage,
+      slug: route.params.slug,
+      readingProgress: 0, // Will be updated when reading chapters
+      totalChapters: chapters.value.length
+    })
+  }
+}, { immediate: true })
 
 // Handle 404
 if (error.value?.statusCode === 404) {

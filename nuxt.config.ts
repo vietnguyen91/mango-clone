@@ -100,6 +100,8 @@ export default defineNuxtConfig({
     format: ['webp', 'jpg', 'png', 'svg'],
     quality: 80,
     densities: [1, 2],
+    // Note: We handle Contabo image optimization skip in component logic
+    // instead of using providers to avoid import resolution issues
     presets: {
       manga: {
         modifiers: {

@@ -40,11 +40,11 @@
       </div>
     </div>
 
-    <!-- Actual Image -->
+    <!-- Skip IPX: Use regular img tag (Contabo images, local images, etc.) -->
     <img
-      v-if="shouldLoad"
+      v-if="shouldLoad && shouldSkipIPX"
       ref="imageRef"
-      :src="optimizedSrc"
+      :src="props.src"
       :alt="alt"
       :class="[
         'transition-opacity duration-300',
@@ -56,23 +56,25 @@
       :loading="eager ? 'eager' : 'lazy'"
     />
 
-    <!-- Progressive Enhancement: WebP with fallback -->
-    <picture v-if="shouldLoad && supportsWebP">
-      <source :srcset="webpSrc" type="image/webp">
-      <img
-        ref="imageRef"
-        :src="optimizedSrc"
-        :alt="alt"
-        :class="[
-          'transition-opacity duration-300',
-          imageClass,
-          { 'opacity-0': !loaded, 'opacity-100': loaded }
-        ]"
-        @load="onLoad"
-        @error="onError"
-        :loading="eager ? 'eager' : 'lazy'"
-      />
-    </picture>
+    <!-- External Images: Use NuxtImg for IPX processing -->
+    <NuxtImg
+      v-else-if="shouldLoad && !shouldSkipIPX"
+      ref="imageRef"
+      :src="props.src"
+      :alt="alt"
+      :quality="isSlowNetwork ? Math.min(quality - 20, 60) : quality"
+      :format="supportsWebP ? 'webp' : 'auto'"
+      :width="getOptimalWidth()"
+      :sizes="sizes"
+      :class="[
+        'transition-opacity duration-300',
+        imageClass,
+        { 'opacity-0': !loaded, 'opacity-100': loaded }
+      ]"
+      @load="onLoad"
+      @error="onError"
+      :loading="eager ? 'eager' : 'lazy'"
+    />
 
     <!-- Loading Progress (for large images) -->
     <div 
@@ -163,33 +165,22 @@ let observer = null
 // Computed
 const config = useRuntimeConfig()
 
-const optimizedSrc = computed(() => {
-  if (!props.src) return ''
-  
-  // If it's already an optimized URL, return as is
-  if (props.src.includes('?')) return props.src
-  
-  // Add optimization parameters for Vietnamese mobile networks
-  const params = new URLSearchParams({
-    q: isSlowNetwork.value ? Math.min(props.quality - 20, 60) : props.quality,
-    f: 'auto',
-    w: getOptimalWidth(),
-    ...(isSlowNetwork.value && { blur: '2' }) // Slight blur for faster loading on slow networks
-  })
-  
-  return `${props.src}?${params.toString()}`
-})
+const shouldSkipIPX = computed(() => {
+  if (!props.src || typeof props.src !== 'string') {
+    return true // Skip IPX for invalid sources
+  }
 
-const webpSrc = computed(() => {
-  if (!supportsWebP.value || !props.src) return ''
-  
-  const params = new URLSearchParams({
-    q: isSlowNetwork.value ? Math.min(props.quality - 20, 60) : props.quality,
-    f: 'webp',
-    w: getOptimalWidth()
-  })
-  
-  return `${props.src}?${params.toString()}`
+  // Skip IPX for Contabo images
+  if (props.src.includes('usc1.contabostorage.com')) {
+    return true
+  }
+
+  // Skip IPX for local images (starting with / but not external URLs)
+  if (props.src.startsWith('/') && !props.src.startsWith('//')) {
+    return true
+  }
+
+  return false
 })
 
 // Methods

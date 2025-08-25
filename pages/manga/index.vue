@@ -295,9 +295,9 @@ const fetchManga = async () => {
     const data = await response.json();
     
     if (data.success) {
-      manga.value = data.data;
-      totalManga.value = data.pagination.total;
-      totalPages.value = data.pagination.pages;
+      manga.value = data.data.manga || data.data;
+      totalManga.value = data.data.total || 0;
+      totalPages.value = data.data.totalPages || 1;
     }
   } catch (error) {
     console.error('Error fetching manga:', error);

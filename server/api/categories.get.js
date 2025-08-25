@@ -1,23 +1,23 @@
-import connectDB from '~/server/utils/db';
-import Manga from '~/server/models/Manga';
+import { connectToDatabase } from '../utils/mongodb.js'
 
 export default defineEventHandler(async (event) => {
   try {
-    await connectDB();
-    
-    // Get all unique genres from manga collection
-    const genres = await Manga.distinct('genres');
-    
+    const { db } = await connectToDatabase()
+
+    // Get unique genres from manga collection
+    const genres = await db.collection('mangas').distinct('genres')
+
+    // Get unique statuses from manga collection
+    const statuses = await db.collection('mangas').distinct('status')
+
     // Filter out null/undefined values and sort
     const validGenres = genres
       .filter(genre => genre != null && genre !== '')
-      .sort();
-    
-    // Get all unique statuses
-    const statuses = await Manga.distinct('status');
+      .sort()
+
     const validStatuses = statuses
       .filter(status => status != null && status !== '')
-      .sort();
+      .sort()
 
     return {
       success: true,
@@ -25,12 +25,16 @@ export default defineEventHandler(async (event) => {
         genres: validGenres,
         statuses: validStatuses
       }
-    };
+    }
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Internal server error'
-    });
+    console.error('Error fetching categories:', error)
+    return {
+      success: false,
+      error: error.message,
+      data: {
+        genres: [],
+        statuses: []
+      }
+    }
   }
-});
+})

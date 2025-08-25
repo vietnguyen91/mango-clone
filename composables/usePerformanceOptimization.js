@@ -222,6 +222,11 @@ export const usePerformanceOptimization = () => {
       format = 'auto'
     } = options
 
+    // Skip optimization for Contabo images - return original URL
+    if (imageUrl && imageUrl.includes('usc1.contabostorage.com')) {
+      return imageUrl
+    }
+
     // Adjust quality based on network
     let adjustedQuality = quality
     if (networkInfo.value.effectiveType === '2g') {
